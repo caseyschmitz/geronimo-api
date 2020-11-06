@@ -7,8 +7,8 @@ ENVIRONMENT = 'DEV'
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '$qwepksz_zu)yy%+1ik3t^0quq5a6ltcpg_v27!6)f_(w=^d6^'
 
-ROOT_URLCONF = 'geronimo.urls'
-WSGI_APPLICATION = 'geronimo.wsgi.application'
+ROOT_URLCONF = 'backend.urls'
+WSGI_APPLICATION = 'backend.wsgi.application'
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
