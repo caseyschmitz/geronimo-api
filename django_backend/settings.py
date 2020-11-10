@@ -9,7 +9,7 @@ https://docs.djangoproject.com/en/3.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
-from .localsettings import BASE_DIR, ROOT_URLCONF, DATABASES, STATIC_URL, STATICFILES_DIRS
+from .localsettings import BASE_DIR, ROOT_URLCONF, STATIC_URL, STATICFILES_DIRS
 import os
 
 # Quick-start development settings - unsuitable for production
