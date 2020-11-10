@@ -3,10 +3,9 @@ from django.contrib.auth.models import User
 from .models import TestNode, SpeedTest
 
 class TestNodeSerializer(serializers.HyperlinkedModelSerializer):
-    speedtests = serializers.HyperlinkedRelatedField(many=True, view_name='speedtest-detail', read_only=True)
     class Meta:
         model = TestNode
-        fields = ['url', 'id', 'name', 'uri', 'active', 'speedtests']
+        fields = ['url', 'id', 'name', 'uri', 'active']
 
 class SpeedTestSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
