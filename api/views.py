@@ -11,8 +11,8 @@ from .permissions import IsOwnerOrReadOnly
 @api_view(['GET'])
 def api_root(request, format=None):
     return Response({
-        'speedtest': reverse('speedtest-list', request=request, format=format),
-        'testnode': reverse('testnode-list', request=request, format=format),
+        'speed-tests': reverse('speedtest-list', request=request, format=format),
+        'test-nodes': reverse('testnode-list', request=request, format=format),
     })
 
 class SpeedTestList(generics.ListCreateAPIView):
