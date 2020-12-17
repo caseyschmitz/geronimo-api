@@ -1,4 +1,5 @@
-from rest_framework import generics, permissions
+from rest_framework import generics, permissions, authentication, status
+from rest_framework_json_api.parsers import JSONParser
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
@@ -13,6 +14,7 @@ def api_root(request, format=None):
     return Response({
         'speed-tests': reverse('speedtest-list', request=request, format=format),
         'test-nodes': reverse('testnode-list', request=request, format=format),
+        'users': reverse('user-list', request=request, format=format),
     })
 
 class SpeedTestList(generics.ListCreateAPIView):
@@ -29,7 +31,8 @@ class SpeedTestDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = SpeedTestSerializer
 
 class TestNodeList(generics.ListCreateAPIView):
-    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = TestNode.objects.all()
     serializer_class = TestNodeSerializer
 
@@ -39,9 +42,18 @@ class TestNodeDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = TestNodeSerializer
 
 class UserList(generics.ListAPIView):
+    authentication_classes = [authentication.TokenAuthentication]
+    permission_classes = [permissions.IsAuthenticated]
     queryset = User.objects.all()
     serializer_class = UserSerializer
 
 class UserDetail(generics.RetrieveAPIView):
     queryset = User.objects.all()
+    serializer_class = UserSerializer
+
+class UserCreate(generics.CreateAPIView):
+    resource_name = 'users'
+    model = User
+    parser_classes = [JSONParser]
+    permission_classes = [permissions.AllowAny]
     serializer_class = UserSerializer

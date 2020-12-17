@@ -16,7 +16,17 @@ class SpeedTestSerializer(serializers.HyperlinkedModelSerializer):
         fields = ['url', 'id', 'type', 'owner', 'node', 'created', 'modified', 'started', 'completed', 'data']
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    password = serializers.CharField(write_only=True)
+
+    def create(self, validated_data):
+        user = User.objects.create(
+            username=validated_data['username']
+        )
+        user.set_password(validated_data['password'])
+        user.save()
+        return user
+
     speedtests = serializers.HyperlinkedRelatedField(many=True, view_name='speedtest-detail', read_only=True)
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'speedtests']
+        fields = ['url', 'id', 'username', 'password', 'speedtests']
