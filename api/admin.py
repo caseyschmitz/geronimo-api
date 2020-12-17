@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import TestNode, SpeedTest
+from .models import SpeedTestClient, SpeedTest
 
-admin.site.register(TestNode)
+admin.site.register(SpeedTestClient)
 admin.site.register(SpeedTest)

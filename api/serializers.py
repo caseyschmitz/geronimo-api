@@ -1,15 +1,15 @@
 from rest_framework_json_api import serializers
 from django.contrib.auth.models import User
-from .models import TestNode, SpeedTest
+from .models import SpeedTestClient, SpeedTest
 
-class TestNodeSerializer(serializers.HyperlinkedModelSerializer):
+class SpeedTestClientSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
-        model = TestNode
+        model = SpeedTestClient
         fields = ['url', 'id', 'name', 'uri', 'active']
 
 class SpeedTestSerializer(serializers.HyperlinkedModelSerializer):
     owner = serializers.ReadOnlyField(source='owner.username')
-    node = serializers.HyperlinkedRelatedField(many=False, view_name='testnode-detail', read_only=True)
+    node = serializers.HyperlinkedRelatedField(many=False, view_name='speedtestclient-detail', read_only=True)
 
     class Meta:
         model = SpeedTest

@@ -4,8 +4,8 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework.reverse import reverse
 from django.contrib.auth.models import User
-from .models import SpeedTest, TestNode
-from .serializers import TestNodeSerializer, SpeedTestSerializer, UserSerializer
+from .models import SpeedTest, SpeedTestClient
+from .serializers import SpeedTestClientSerializer, SpeedTestSerializer, UserSerializer
 from .permissions import IsOwnerOrReadOnly
 
 
@@ -30,16 +30,15 @@ class SpeedTestDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = SpeedTest.objects.all()
     serializer_class = SpeedTestSerializer
 
-class TestNodeList(generics.ListCreateAPIView):
-    authentication_classes = [authentication.TokenAuthentication]
-    permission_classes = [permissions.IsAuthenticated]
-    queryset = TestNode.objects.all()
-    serializer_class = TestNodeSerializer
-
-class TestNodeDetail(generics.RetrieveUpdateDestroyAPIView):
+class SpeedTestClientList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
-    queryset = TestNode.objects.all()
-    serializer_class = TestNodeSerializer
+    queryset = SpeedTestClient.objects.all()
+    serializer_class = SpeedTestClientSerializer
+
+class SpeedTestClientDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [permissions.IsAuthenticatedOrReadOnly]
+    queryset = SpeedTestClient.objects.all()
+    serializer_class = SpeedTestClientSerializer
 
 class UserList(generics.ListAPIView):
     authentication_classes = [authentication.TokenAuthentication]
