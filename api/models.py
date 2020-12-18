@@ -27,6 +27,7 @@ class SpeedTestClient(models.Model):
     name = models.CharField(max_length=128, unique=True, blank=False)
     uri = models.URLField(unique=True, blank=False)
     active = models.BooleanField(default=True, blank=False)
+    owner = models.ForeignKey('auth.User', related_name='speedtestsclient', on_delete=models.CASCADE)
 
     # to appease pylint
     objects = models.Manager()
@@ -78,13 +79,13 @@ class SpeedTest(models.Model):
 
     type = models.IntegerField(default=0, choices=Type.choices, blank=False)
     owner = models.ForeignKey('auth.User', related_name='speedtests', on_delete=models.CASCADE)
-    client = models.ForeignKey(SpeedTestClient, on_delete=models.CASCADE)
+    client = models.ForeignKey(SpeedTestClient, default=0, on_delete=models.CASCADE)
     created = models.DateTimeField(auto_now_add=True)
     modified = models.DateTimeField(default=timezone.now, editable=False, blank=False)
     scheduled = models.DateTimeField(default=default_scheduled, blank=False)
     started = models.DateTimeField(editable=False, null=True, blank=True)
     completed = models.DateTimeField(editable=False, null=True, blank=True)
-    result = models.OneToOneField(SpeedTestResult, on_delete=models.CASCADE, editable=False, blank=True)
+    result = models.OneToOneField(SpeedTestResult, default=0, on_delete=models.CASCADE, editable=False, blank=True)
 
     # to appease pylint
     objects = models.Manager()

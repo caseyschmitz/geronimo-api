@@ -65,3 +65,6 @@ venv.bak/
 !.vscode/extensions.json 
 .history
 localsettings.py
+
+static/
+static-root/

@@ -13,7 +13,7 @@ from .permissions import IsOwnerOrReadOnly
 def api_root(request, format=None):
     return Response({
         'speed-tests': reverse('speedtest-list', request=request, format=format),
-        'test-nodes': reverse('testnode-list', request=request, format=format),
+        'speed-test-clients': reverse('speedtestclient-list', request=request, format=format),
         'users': reverse('user-list', request=request, format=format),
     })
 
@@ -34,6 +34,10 @@ class SpeedTestClientList(generics.ListCreateAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
     queryset = SpeedTestClient.objects.all()
     serializer_class = SpeedTestClientSerializer
+
+    def perform_create(self, serializer):
+        serializer.save(owner=self.request.user)
+
 
 class SpeedTestClientDetail(generics.RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticatedOrReadOnly]
