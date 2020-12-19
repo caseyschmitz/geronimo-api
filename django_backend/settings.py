@@ -10,6 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
+import environ
 from pathlib import Path
 import logging
 
@@ -21,11 +22,18 @@ logging.basicConfig(
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
-SECRET_KEY = os.environ.get('SECRET_KEY')
+env = environ.Env(
+    DEBUG=(bool, False)
+)
+environ.Env.read_env('.env')
 
-DEBUG = int(os.environ.get('DEBUG', 0))
+DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = os.environ.get('DJANGO_ALLOWED_HOSTS').split(' ')
+SECRET_KEY = env('SECRET_KEY')
+
+DEBUG = int(env('DEBUG', 0))
+
+ALLOWED_HOSTS = env('DJANGO_ALLOWED_HOSTS').split(' ')
 
 # Set to DEV for debug and other configuration items.  PROD otherwise...
 ROOT_URLCONF = 'django_backend.urls'
@@ -40,8 +48,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-STATIC_URL = '/static-files/'
-STATIC_ROOT = '/home/geronimo/backend/static/'
+STATIC_URL = '/static/'
+#STATIC_ROOT = env('STATIC_ROOT', default='./static')
 #STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static'),]
 
 
@@ -111,12 +119,12 @@ AUTH_PASSWORD_VALIDATORS = [
 
 DATABASES = {
     'default': {
-        'ENGINE': os.environ.get('SQL_ENGINE', 'django.db.backends.sqlite3'),
-        'NAME': os.environ.get('SQL_DATABASE', os.path.join(BASE_DIR, 'db.sqlite3')),
-        'USER': os.environ.get('SQL_USER', 'postgres'),
-        'PASSWORD': os.environ.get('SQL_PASSWORD', 'password'),
-        'HOST': os.environ.get('SQL_HOST', 'localhost'),
-        'POST': os.environ.get('SQL_PORT', 5432),
+        'ENGINE': env('SQL_ENGINE', default='django.db.backends.sqlite3'),
+        'NAME': env('SQL_DATABASE', default=os.path.join(BASE_DIR, 'db.sqlite3')),
+        'USER': env('SQL_USER', default='user'),
+        'PASSWORD': env('SQL_PASSWORD', default='password'),
+        'HOST': env('SQL_HOST', default='localhost'),
+        'POST': env('SQL_PORT', default=5432),
     }
 }
 

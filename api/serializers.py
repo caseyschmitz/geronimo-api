@@ -1,9 +1,9 @@
 from rest_framework_json_api import serializers
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from .models import SpeedTestClient, SpeedTestServer, SpeedTestResult, SpeedTest
 
 class SpeedTestClientSerializer(serializers.HyperlinkedModelSerializer):
-    owner = serializers.ReadOnlyField(source='owner.username')
+    owner = serializers.HyperlinkedRelatedField(many=False, view_name='user-detail', read_only=True)
     class Meta:
         model = SpeedTestClient
         fields = ['url', 'id', 'name', 'uri', 'active', 'owner']
@@ -27,8 +27,14 @@ class SpeedTestSerializer(serializers.HyperlinkedModelSerializer):
         model = SpeedTest
         fields = ['url', 'id', 'type', 'owner', 'client', 'created', 'modified', 'started', 'completed', 'result']
 
+class GroupSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['name']
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     password = serializers.CharField(write_only=True)
+    groups = GroupSerializer(many=True)
 
     def create(self, validated_data):
         user = User.objects.create(
@@ -38,7 +44,10 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         user.save()
         return user
 
-    speedtests = serializers.HyperlinkedRelatedField(many=True, view_name='speedtest-detail', read_only=True)
     class Meta:
         model = User
-        fields = ['url', 'id', 'username', 'password', 'speedtests']
+        fields = [
+            'url', 'id', 'username', 'first_name', 'last_name', 'email', 
+            'password', 'groups', 'user_permissions', 'is_staff',
+            'is_active', 'is_superuser', 'last_login', 'date_joined'
+        ]
